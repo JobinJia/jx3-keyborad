@@ -1,0 +1,1 @@
+export const JX3_USER_DATA_DIR_PATH = 'JX3_USER_DATA_DIR_PATH';

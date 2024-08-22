@@ -11,13 +11,13 @@
   "app": {
     "windows": [
       {
-        "title": "jx3-keyborad",
-        "width": 800,
-        "height": 600
+        "title": "改个键位",
+        "width": 1200,
+        "height": 800
       }
     ],
     "security": {
-      "csp": null
+      "csp": "default-src blob: data: filesystem: ws: wss: http: https: tauri: http://tauri.localhost 'unsafe-eval' 'unsafe-inline' 'self'"
     }
   },
   "bundle": {
