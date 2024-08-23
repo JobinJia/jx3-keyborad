@@ -51,8 +51,8 @@ jobs:
     - name: Build Tauri app
       run: pnpm tauri build
 
-    - name: Upload artifact
+    - name: Upload executable
       uses: actions/upload-artifact@v3
       with:
-        name: tauri-app
-        path: src-tauri/target/release/bundle/msi/*.msi
+        name: jx3-keyborad-exe
+        path: src-tauri/target/release/jx3-keyborad.exe
