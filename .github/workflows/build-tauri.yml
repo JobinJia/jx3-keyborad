@@ -27,14 +27,8 @@ jobs:
 
     - name: Install pnpm
       run: npm install -g pnpm
-    - name: Install pnpm2
-      run: pnpm add -g pnpm
-
-    - name: Set up pnpm global bin
-      run: |
-        pnpm setup
-        echo "PNPM_HOME=$(pnpm config get global-bin-dir)" >> $GITHUB_ENV
-        echo "$(pnpm config get global-bin-dir)" >> $GITHUB_PATH
+    - name: pnpm Setup 
+      run: pnpm setup --force
 
     - name: Install dependencies with pnpm
       run: pnpm install
