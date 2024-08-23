@@ -27,6 +27,8 @@ jobs:
 
     - name: Install pnpm
       run: npm install -g pnpm
+    - name: Install pnpm2
+      run: pnpm add -g pnpm
 
     - name: Set up pnpm global bin
       run: |
