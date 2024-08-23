@@ -1,4 +1,4 @@
-name: Build Tauri App
+name: Build and Upload Tauri App
 
 on:
   push:
@@ -12,10 +12,6 @@ jobs:
   build:
     runs-on: windows-latest
 
-    strategy:
-      matrix:
-        rust-version: [stable]
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -28,25 +24,15 @@ jobs:
     - name: Install pnpm
       run: npm install -g pnpm
 
-    - name: Configure PNPM_HOME and PATH
-      run: |
-        $pnpmHome = "${{ env.USERPROFILE }}\AppData\Local\pnpm"
-        echo "PNPM_HOME=$pnpmHome" >> $env:GITHUB_ENV
-        echo "$pnpmHome" >> $env:GITHUB_PATH
-        [System.IO.Directory]::CreateDirectory($pnpmHome) # Create the directory if it doesn't exist
-
     - name: Install dependencies with pnpm
       run: pnpm install
 
-    - name: Set up Rust ${{ matrix.rust-version }}
+    - name: Set up Rust
       uses: actions-rs/toolchain@v1
       with:
-        toolchain: ${{ matrix.rust-version }}
+        toolchain: stable
         override: true
         target: x86_64-pc-windows-msvc
-
-    - name: Install Tauri CLI
-      run: pnpm add -g @tauri-apps/cli
 
     - name: Build Tauri app
       run: pnpm tauri build
