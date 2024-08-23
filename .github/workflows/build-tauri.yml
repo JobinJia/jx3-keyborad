@@ -31,8 +31,8 @@ jobs:
     - name: Set up pnpm global bin
       run: |
         pnpm setup
-        echo "PNPM_HOME=$HOME/pnpm" >> $GITHUB_ENV
-        echo "$HOME/pnpm/bin" >> $GITHUB_PATH
+        echo "PNPM_HOME=$(pnpm config get global-bin-dir)" >> $GITHUB_ENV
+        echo "$(pnpm config get global-bin-dir)" >> $GITHUB_PATH
 
     - name: Install dependencies with pnpm
       run: pnpm install
