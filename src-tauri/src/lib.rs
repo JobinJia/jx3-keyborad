@@ -28,11 +28,6 @@ impl FileEntry {
     }
 }
 
-#[derive(Serialize)]
-struct DirectoryContents {
-    entries: Vec<FileEntry>,
-}
-
 // 生成唯一的 ID
 fn generate_id(name: &str, path: &Path) -> u64 {
     let mut hasher = DefaultHasher::new();
