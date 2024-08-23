@@ -35,7 +35,7 @@ jobs:
         target: x86_64-pc-windows-msvc
 
     - name: Build Tauri app
-      run: pnpm tauri build
+      run: pnpm tauri build --no-bundle
 
     - name: Upload executable
       uses: actions/upload-artifact@v3
