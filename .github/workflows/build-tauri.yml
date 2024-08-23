@@ -27,8 +27,13 @@ jobs:
 
     - name: Install pnpm
       run: npm install -g pnpm
-    - name: pnpm Setup 
-      run: pnpm setup --force
+
+    - name: Configure PNPM_HOME and PATH
+      run: |
+        $pnpmHome = "${{ env.USERPROFILE }}\AppData\Local\pnpm"
+        echo "PNPM_HOME=$pnpmHome" >> $env:GITHUB_ENV
+        echo "$pnpmHome" >> $env:GITHUB_PATH
+        [System.IO.Directory]::CreateDirectory($pnpmHome) # Create the directory if it doesn't exist
 
     - name: Install dependencies with pnpm
       run: pnpm install
