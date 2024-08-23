@@ -56,7 +56,7 @@ fn read_directory(path: &Path, depth: usize) -> Result<Vec<FileEntry>, String> {
 
             let subdir = read_directory(&entry.path(), depth + 1)?;
 
-            if (depth == 3 || depth == 2) && subdir.is_empty() {
+            if (depth == 3 || depth == 2 || depth == 1) && subdir.is_empty() {
                 continue;
             }
 
