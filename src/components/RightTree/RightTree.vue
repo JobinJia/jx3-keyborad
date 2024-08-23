@@ -9,18 +9,19 @@ import { findPath } from "../../utils";
 import { EmitSelect } from "../types";
 
 const emit = defineEmits<{
-  source: [source: EmitSelect]
+  target: [target: EmitSelect]
 }>()
 
 const jx3UserDataPath = useStorage(JX3_USER_DATA_DIR_PATH, '', localStorage)
 const message = useMessage()
 
 const fileEntries = ref<FileEntry[]>([]);
-const source = ref('')
+const target = ref('')
+const loading = ref(false)
 
-watch(source, (val) => {
+watch(target, (val) => {
   const path = findPath(fileEntries.value, val)
-  emit('source', {
+  emit('target', {
     name: val,
     path: path as string
   })
@@ -28,7 +29,9 @@ watch(source, (val) => {
 
 async function readeDir() {
   // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+  loading.value = true;
   const originData: FileEntry[] = await invoke("list_directory_contents", { path: jx3UserDataPath.value });
+  loading.value = false;
   fileEntries.value = originData // tranformData(originData);
   console.log(fileEntries.value);
 }
@@ -56,6 +59,12 @@ function renderPrefix(info: { option: FileEntry, checked: boolean, selected: boo
     checked: selected,
     'onUpdate:checked': (value: boolean) => {
       info.selected = value;
+      // if (value) {
+      //   selectedAccount.value = option.name;
+      //   message.success(`选择${option.name}`)
+      // } else {
+      //   message.success(`取消选择${option.name}`)
+      // }
     }
   })
 }
@@ -68,21 +77,38 @@ function handleSelectedKeys(keys: Array<string | number>, option: Array<FileEntr
   }
   if (action === 'select') {
     message.success(`选择${node?.name}`)
-    source.value = node!.name;
+    target.value = node!.name;
   } else {
     message.success(`取消选择${node?.name}`)
   }
+}
+
+function handleRefresh() {
+  readeDir()
 }
 
 </script>
 
 <template>
   <div class="wrapper">
-    <n-input v-model:value="pattern" placeholder="搜索源账号/角色名称" />
+    <n-input-group>
+      <n-input v-model:value="pattern" placeholder="搜索目标账号/角色名称">
+      </n-input>
+      <n-tooltip trigger="hover">
+        <template #trigger>
+          <n-button @click="handleRefresh">
+            刷新
+          </n-button>
+        </template>
+        如果没有找到角色，猛猛刷新
+      </n-tooltip>
+    </n-input-group>
     <div class="tree">
-      <n-tree :pattern="pattern" :data="fileEntries" block-line key-field="id" label-field="name" :filter="handleFilter"
-        :show-irrelevant-nodes="false" expand-on-click :render-prefix="renderPrefix"
-        :on-update:selected-keys="handleSelectedKeys"></n-tree>
+      <n-spin :show="loading">
+        <n-tree :pattern="pattern" :data="fileEntries" block-line key-field="id" label-field="name"
+          :filter="handleFilter" :show-irrelevant-nodes="false" expand-on-click :render-prefix="renderPrefix"
+          :on-update:selected-keys="handleSelectedKeys"></n-tree>
+      </n-spin>
     </div>
   </div>
 </template>

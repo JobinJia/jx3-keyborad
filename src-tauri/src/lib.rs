@@ -5,6 +5,7 @@ use std::fs;
 use std::path::Path;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
+use serde::Deserialize;
 
 #[derive(Serialize)]
 struct FileEntry {
@@ -54,20 +55,16 @@ fn read_directory(path: &Path, depth: usize) -> Result<Vec<FileEntry>, String> {
         if metadata.is_dir() {
             let dir_name = entry.file_name().into_string().unwrap_or_default();
 
-            // 跳过名为 "userpreferences" 的文件夹
             if dir_name == "userpreferences" {
                 continue;
             }
 
-            // 递归读取子目录的内容
             let subdir = read_directory(&entry.path(), depth + 1)?;
 
-            // 如果是第三层并且没有子内容，不保留该目录
             if (depth == 3 || depth == 2) && subdir.is_empty() {
                 continue;
             }
 
-            // 如果有子目录，或者不是第三层，保留此目录
             let children = if subdir.is_empty() {
                 None
             } else {
@@ -92,12 +89,68 @@ fn list_directory_contents(path: &str) -> Result<Vec<FileEntry>, String> {
     read_directory(path, 1) // 从深度 1 开始
 }
 
+
+#[derive(Deserialize)]
+struct CopyParams {
+    source_path: String,
+    target_path: String,
+}
+
+#[command]
+fn cp_source_to_target(params: CopyParams) -> bool {
+    let source_path = Path::new(&params.source_path);
+    let target_path = Path::new(&params.target_path);
+
+    // 处理过程中的错误将返回 false
+    if target_path.exists() {
+        if let Err(_) = fs::remove_dir_all(&target_path) {
+            return false;
+        }
+        if let Err(_) = fs::create_dir_all(&target_path) {
+            return false;
+        }
+    } else {
+        if let Err(_) = fs::create_dir_all(&target_path) {
+            return false;
+        }
+    }
+
+    // 尝试复制目录
+    if copy_dir_all(&source_path, &target_path).is_err() {
+        return false;
+    }
+
+    // 如果一切顺利，返回 true
+    true
+}
+
+// 递归复制目录
+fn copy_dir_all(src: &Path, dst: &Path) -> Result<(), String> {
+    if src.is_dir() {
+        fs::create_dir_all(dst).map_err(|e| e.to_string())?;
+        for entry in fs::read_dir(src).map_err(|e| e.to_string())? {
+            let entry = entry.map_err(|e| e.to_string())?;
+            let file_type = entry.file_type().map_err(|e| e.to_string())?;
+            let new_dst = dst.join(entry.file_name());
+            if file_type.is_dir() {
+                copy_dir_all(&entry.path(), &new_dst)?;
+            } else {
+                fs::copy(entry.path(), new_dst).map_err(|e| e.to_string())?;
+            }
+        }
+    } else {
+        return Err(format!("Source path {} is not a directory", src.display()));
+    }
+    Ok(())
+}
+
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_dialog::init())
-        .invoke_handler(tauri::generate_handler![greet, list_directory_contents])
+        .invoke_handler(tauri::generate_handler![greet, list_directory_contents, cp_source_to_target])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

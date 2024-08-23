@@ -5,30 +5,32 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "tauri:dev": "tauri dev"
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "build:windows": "tauri build --target x86_64-pc-windows-msvc"
   },
   "dependencies": {
     "@tauri-apps/api": "2.0.0-rc.2",
     "@tauri-apps/plugin-dialog": "2.0.0-rc.0",
     "@tauri-apps/plugin-fs": "2.0.0-rc.1",
-    "@tauri-apps/plugin-shell": ">=2.0.0-rc.0",
+    "@tauri-apps/plugin-shell": "2.0.0-rc.0",
     "@vicons/ionicons5": "^0.12.0",
     "@vueuse/core": "^11.0.1",
-    "vue": "^3.3.4"
+    "vue": "^3.4.38"
   },
   "devDependencies": {
     "@tauri-apps/cli": "2.0.0-rc.5",
-    "@vitejs/plugin-vue": "^5.0.5",
+    "@vitejs/plugin-vue": "^5.1.2",
     "less": "^4.2.0",
     "naive-ui": "^2.39.0",
-    "typescript": "^5.2.2",
+    "typescript": "^5.5.4",
     "unplugin-auto-import": "^0.18.2",
     "unplugin-vue-components": "^0.27.4",
-    "vite": "^5.3.1",
-    "vue-tsc": "^2.0.22"
+    "vite": "^5.4.2",
+    "vue-tsc": "^2.0.29"
   },
   "packageManager": "pnpm@7.27.0+sha1.572d3b6d6b0ff64f11edd1c4e8774cc7351f1089"
 }

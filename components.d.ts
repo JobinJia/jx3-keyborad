@@ -9,13 +9,21 @@ declare module 'vue' {
   export interface GlobalComponents {
     Greet: typeof import('./src/components/Greet.vue')['default']
     LeftTree: typeof import('./src/components/LeftTree/LeftTree.vue')['default']
+    NAlert: typeof import('naive-ui')['NAlert']
     NButton: typeof import('naive-ui')['NButton']
     NDrawer: typeof import('naive-ui')['NDrawer']
     NDrawerContent: typeof import('naive-ui')['NDrawerContent']
+    NForm: typeof import('naive-ui')['NForm']
+    NFormItem: typeof import('naive-ui')['NFormItem']
     NIcon: typeof import('naive-ui')['NIcon']
     NInput: typeof import('naive-ui')['NInput']
+    NInputGroup: typeof import('naive-ui')['NInputGroup']
     NSpace: typeof import('naive-ui')['NSpace']
+    NSpin: typeof import('naive-ui')['NSpin']
+    NTooltip: typeof import('naive-ui')['NTooltip']
     NTree: typeof import('naive-ui')['NTree']
-    SelectBaseDir: typeof import('./src/components/SelectBaseDir/SelectBaseDir.vue')['default']
+    Result: typeof import('./src/components/Result/Result.vue')['default']
+    RightTree: typeof import('./src/components/RightTree/RightTree.vue')['default']
+    Settings: typeof import('./src/components/Settings/Settings.vue')['default']
   }
 }

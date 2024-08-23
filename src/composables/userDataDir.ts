@@ -1,10 +1,12 @@
 import { useStorage } from "@vueuse/core";
 import { open } from '@tauri-apps/plugin-dialog';
 import { JX3_USER_DATA_DIR_PATH } from "../common/constants";
-import { MessageApiInjection } from "naive-ui/es/message/src/MessageProvider";
+import { useMessage } from 'naive-ui'
 
-export function useUserDataDir(message: MessageApiInjection) {
+export function useUserDataDir() {
   const jx3UserDataPath = useStorage(JX3_USER_DATA_DIR_PATH, '', localStorage)
+
+  const message = useMessage();
 
   async function selectDirectory() {
     const selected = await open({

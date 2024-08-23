@@ -1,50 +1,78 @@
 <script setup lang="ts">
-import { NConfigProvider, NMessageProvider, useMessage } from 'naive-ui'
+import { NConfigProvider, NMessageProvider } from 'naive-ui'
 import LeftTree from './components/LeftTree/LeftTree.vue';
+import RightTree from './components/RightTree/RightTree.vue';
+import Result from './components/Result/Result.vue';
 import { ref } from 'vue';
 import { SettingsOutline } from '@vicons/ionicons5';
-import { useUserDataDir } from './composables/userDataDir';
 import { useStorage } from '@vueuse/core';
 import { JX3_USER_DATA_DIR_PATH } from './common/constants';
-
-// const message = useMessage();
-
-// const { jx3UserDataPath, selectDirectory } = useUserDataDir(message)
+import Settings from './components/Settings/Settings.vue'
+import { EmitSelect } from "./components/types";
 
 const active = ref(false)
 const jx3UserDataPath = useStorage(JX3_USER_DATA_DIR_PATH, '', localStorage)
+
+const userSelect = ref({
+  source: '',
+  sourcePath: '',
+  target: '',
+  targetPath: '',
+})
+
+function setSource(val: EmitSelect) {
+  const { name, path } = val;
+  userSelect.value.source = name
+  userSelect.value.sourcePath = path
+}
+
+function setTarget(val: EmitSelect) {
+  const { name, path } = val;
+  userSelect.value.target = name
+  userSelect.value.targetPath = path
+}
 </script>
 
 <template>
-   <div class="app">
+  <div class="app">
     <NConfigProvider>
       <NMessageProvider>
         <n-space reverse>
           <n-button circle @click="active = !active">
             <template #icon>
-              <n-icon><SettingsOutline /></n-icon>
+              <n-icon>
+                <SettingsOutline />
+              </n-icon>
             </template>
           </n-button>
         </n-space>
         <div v-if="!jx3UserDataPath">
-          设置
+          先点设置，在弹出的面板中设置 userdata 的路径
         </div>
-        <LeftTree v-if="jx3UserDataPath" />
-        <n-drawer v-model:show="active" :width="502" placement="right">
-          <n-drawer-content title="斯通纳">
-            《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说。
-          </n-drawer-content>
-        </n-drawer>
+        <div v-if="jx3UserDataPath" class="content">
+          <LeftTree @source="setSource" />
+          <RightTree style="margin-left: 20px" @target="setTarget" />
+          <Result style="margin-left: 20px" :user-select="userSelect"></Result>
+        </div>
+        <Settings v-model:active="active" />
       </NMessageProvider>
     </NConfigProvider>
-   </div>
+  </div>
 </template>
 
 <style lang="less">
-  .app {
-    width: 100vw;
-    height: 100vh;
-    box-sizing: border-box;
-    padding: 20px;
+.app {
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 20px;
+
+  .content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
+}
 </style>
