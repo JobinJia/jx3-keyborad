@@ -37,15 +37,11 @@ function setTarget(val: EmitSelect) {
   <div class="app">
     <NConfigProvider>
       <NMessageProvider>
-        <n-space reverse>
-          <n-button circle @click="active = !active">
-            <template #icon>
-              <n-icon>
-                <SettingsOutline />
-              </n-icon>
-            </template>
-          </n-button>
-        </n-space>
+        <n-float-button :right="10" :top="10" shape="square"  @click="active = !active">
+          <n-icon>
+            <SettingsOutline />
+          </n-icon>
+        </n-float-button>
         <div v-if="!jx3UserDataPath">
           先点设置，在弹出的面板中设置 userdata 的路径
         </div>
@@ -72,7 +68,6 @@ function setTarget(val: EmitSelect) {
     height: 100%;
     display: flex;
     flex-direction: row;
-    align-items: center;
   }
 }
 </style>

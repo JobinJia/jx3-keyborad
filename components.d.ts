@@ -13,6 +13,7 @@ declare module 'vue' {
     NButton: typeof import('naive-ui')['NButton']
     NDrawer: typeof import('naive-ui')['NDrawer']
     NDrawerContent: typeof import('naive-ui')['NDrawerContent']
+    NFloatButton: typeof import('naive-ui')['NFloatButton']
     NForm: typeof import('naive-ui')['NForm']
     NFormItem: typeof import('naive-ui')['NFormItem']
     NIcon: typeof import('naive-ui')['NIcon']

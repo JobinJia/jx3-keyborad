@@ -59,13 +59,19 @@ async function handleGoGO() {
         </n-button>
       </n-form-item>
     </n-form>
+    <n-alert :show-icon="false" title="常见问题及方案">
+      <p> <b> 自己带键位的账号 </b>需要在游戏里 <b>关闭同步到服务器</b>，这样键位在才能本地得到保存 </p>
+      <p> <b>如果是新账号，登入到游戏角色选择界面后，点击刷新就能搜索到这个角色了 </b></p>
+      <p> 这玩意儿本质就是找到对应目录进行复制粘贴，没啥难度，做这个主要是哥们儿很烦每次手动改键位，眼都找瞎了 </p>
+    </n-alert>
   </div>
 </template>
 
 <style scoped lang="less">
 .wrapper {
   width: 30%;
-  height: 100vh;
+  height: 100%;
   position: relative;
+  box-sizing: border-box;
 }
 </style>

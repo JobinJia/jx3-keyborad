@@ -90,13 +90,16 @@ function handleSelectedKeys(keys: Array<string | number>, option: Array<FileEntr
 <style lang="less" scoped>
 .wrapper {
   width: 30%;
-  height: 100vh;
+  height: 100%;
   position: relative;
+  box-sizing: border-box;
 
   .tree {
     width: 100%;
-    height: 100%;
+    margin-top: 10px;
+    height: calc(100vh - 80px);
     overflow: scroll;
+    box-sizing: border-box;
   }
 }
 </style>
