@@ -87,27 +87,29 @@ function handleRefresh() {
   readeDir()
 }
 
+const expand = ref(false)
 </script>
 
 <template>
   <div class="wrapper">
-    <n-input-group>
-      <n-input v-model:value="pattern" placeholder="搜索目标账号/角色名称">
-      </n-input>
-      <n-tooltip trigger="hover">
-        <template #trigger>
-          <n-button @click="handleRefresh">
-            刷新
-          </n-button>
-        </template>
-        如果没有找到角色，猛猛刷新
-      </n-tooltip>
-    </n-input-group>
+   <n-space>
+     <n-input v-model:value="pattern" placeholder="搜索需要改键位的账号/角色名称">
+     </n-input>
+     <n-button type="default" @click="expand = !expand">{{ expand ? '收起' : '展开'  }}</n-button>
+     <n-tooltip trigger="hover">
+       <template #trigger>
+         <n-button @click="handleRefresh">
+           刷新
+         </n-button>
+       </template>
+       如果没有找到角色，猛猛刷新
+     </n-tooltip>
+   </n-space>
     <div class="tree">
       <n-spin :show="loading">
         <n-tree :pattern="pattern" :data="fileEntries" block-line key-field="id" label-field="name"
           :filter="handleFilter" :show-irrelevant-nodes="false" expand-on-click :render-prefix="renderPrefix"
-          :on-update:selected-keys="handleSelectedKeys"></n-tree>
+          :on-update:selected-keys="handleSelectedKeys" :default-expand-all="expand"></n-tree>
       </n-spin>
     </div>
   </div>

@@ -74,15 +74,24 @@ function handleSelectedKeys(keys: Array<string | number>, option: Array<FileEntr
   }
 }
 
+const expand = ref(false)
+
 </script>
 
 <template>
   <div class="wrapper">
-    <n-input v-model:value="pattern" placeholder="搜索源账号/角色名称" />
+    <n-space>
+      <n-input v-model:value="pattern" placeholder="搜索带键位的账号/角色名称" />
+      <n-button type="default" @click="expand = !expand">{{ expand ? '收起' : '展开'  }}</n-button>
+    </n-space>
     <div class="tree">
-      <n-tree :pattern="pattern" :data="fileEntries" block-line key-field="id" label-field="name" :filter="handleFilter"
+      <n-tree
+        :pattern="pattern"
+        :data="fileEntries" block-line key-field="id" label-field="name" :filter="handleFilter"
         :show-irrelevant-nodes="false" expand-on-click :render-prefix="renderPrefix"
-        :on-update:selected-keys="handleSelectedKeys"></n-tree>
+        :on-update:selected-keys="handleSelectedKeys"
+        :default-expand-all="expand"
+      ></n-tree>
     </div>
   </div>
 </template>
